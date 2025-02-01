@@ -1,4 +1,4 @@
-public class Question1 {
+public class Question1a {
 
     public static int findMinMeasurements(int k, int n) {
         // DP table to store the minimum number of measurements
