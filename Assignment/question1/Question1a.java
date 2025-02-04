@@ -1,3 +1,4 @@
+package question1;
 public class Question1a {
 
     public static int findMinMeasurements(int k, int n) {

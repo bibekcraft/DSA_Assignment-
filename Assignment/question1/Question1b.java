@@ -1,3 +1,4 @@
+package question1;
 import java.util.PriorityQueue; // Import PriorityQueue for min-heap implementation
 
 /*

@@ -1,3 +1,4 @@
+package question2;
 /*
  * Problem Explanation:
  * We are given two arrays, `x_coords` and `y_coords`, representing the coordinates of points in a 2D plane.

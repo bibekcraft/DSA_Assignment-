@@ -1,3 +1,4 @@
+package question2;
 /*
  * Problem Explanation:
  * We are given an array of employee performance ratings, and we need to assign rewards to each employee based on the following rules:
