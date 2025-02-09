@@ -1,55 +1,63 @@
 package question2;
 /*
  * Problem Explanation:
- * We are given two arrays, `x_coords` and `y_coords`, representing the coordinates of points in a 2D plane.
- * The goal is to find the lexicographically smallest pair of indices (i, j) such that the Manhattan distance
- * between the points (x_coords[i], y_coords[i]) and (x_coords[j], y_coords[j]) is minimized.
- *
- * Manhattan Distance Formula:
- * |x_coords[i] - x_coords[j]| + |y_coords[i] - y_coords[j]|
- *
- * Lexicographical Order:
- * A pair (i1, j1) is lexicographically smaller than (i2, j2) if:
- * - i1 < i2, or
- * - i1 == i2 and j1 < j2.
- *
- * Approach:
- * 1. Iterate through all possible pairs of points (i, j) where i and j are indices of the two arrays.
- * 2. Calculate the Manhattan distance for each pair.
- * 3. Track the pair with the smallest distance. If multiple pairs have the same distance, choose the lexicographically smallest one.
- *
- * Time Complexity: O(n^2), where n is the number of points.
- * Space Complexity: O(1), as we only store the result and a few variables.
+We have a list of 2D points defined by their x-coordinates and y-coordinates. The goal is to find the pair of points that are closest to each other based on Manhattan Distance, which is calculated as:
+Manhattan Distance=∣xi−xj∣+∣yi−yj∣
+Manhattan Distance=∣xi​−xj​∣+∣yi​−yj​∣
+Step-by-Step Approach
+
+    Iterate over all possible pairs
+        Since we need to compare all points, we use a nested loop.
+
+    Calculate the Manhattan Distance for each pair
+        Compute ∣x[i]−x[j]∣+∣y[i]−y[j]∣∣x[i]−x[j]∣+∣y[i]−y[j]∣.
+        Keep track of the minimum distance encountered so far.
+
+    Update the result if a smaller distance is found
+        If we find a smaller distance, update the minimum distance and store the pair.
+
+    Lexicographically smallest pair handling
+        If two pairs have the same minimum distance, we choose the pair that comes first in lexicographical order:
+            First, compare i (smaller index comes first).
+            If i is the same, choose the smaller j.
  */
+
+
 
 public class Question2b {
 
-    // Method to find the lexicographically smallest pair of closest points
+    /**
+     * Finds the lexicographically smallest pair of points with the minimum
+     * Manhattan distance.
+     *
+     * @param x_coords An array representing the x-coordinates of points.
+     * @param y_coords An array representing the y-coordinates of points.
+     * @return An array containing the indices of the closest pair of points.
+     */
     public static int[] findClosestPair(int[] x_coords, int[] y_coords) {
-        // Input validation: Check if the arrays are valid and have the same length
+        // Input validation: Ensure arrays are non-null and have the same length
         if (x_coords == null || y_coords == null || x_coords.length == 0 || y_coords.length == 0
                 || x_coords.length != y_coords.length) {
-            throw new IllegalArgumentException("Invalid input.");
+            throw new IllegalArgumentException("Invalid input: Arrays must be non-empty and of equal length.");
         }
 
         int n = x_coords.length;
-        int minDistance = Integer.MAX_VALUE; // Initialize the minimum distance to a large value
-        int[] result = new int[2]; // Store the result pair (i, j)
+        int minDistance = Integer.MAX_VALUE; // Initialize the minimum distance
+        int[] result = new int[2]; // Store the best pair (i, j)
 
-        // Iterate through all possible pairs of points
+        // Iterate through all unique pairs of points (i, j)
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                // Calculate the Manhattan distance
+            for (int j = i + 1; j < n; j++) { // Ensures i < j to avoid redundant comparisons
+                // Compute Manhattan distance
                 int distance = Math.abs(x_coords[i] - x_coords[j]) + Math.abs(y_coords[i] - y_coords[j]);
 
-                // Check if the current distance is smaller than the minimum distance
+                // Update the minimum distance and store the best lexicographic pair
                 if (distance < minDistance) {
-                    minDistance = distance; // Update the minimum distance
-                    result[0] = i; // Update the result pair
+                    minDistance = distance;
+                    result[0] = i;
                     result[1] = j;
                 }
-                // If the distance is equal to the minimum distance, choose the
-                // lexicographically smaller pair
+                // If the distance is the same, check lexicographic order
                 else if (distance == minDistance) {
                     if (i < result[0] || (i == result[0] && j < result[1])) {
                         result[0] = i;
@@ -59,10 +67,9 @@ public class Question2b {
             }
         }
 
-        return result; // Return the lexicographically smallest pair
+        return result; // Return the lexicographically smallest closest pair
     }
 
-    // Main method to test the functionality
     public static void main(String[] args) {
         // Example input
         int[] x_coords = { 1, 2, 3, 2, 4 };
@@ -73,5 +80,18 @@ public class Question2b {
 
         // Print the result
         System.out.println("Output: [" + result[0] + ", " + result[1] + "]"); // Expected: [0, 3]
+
+        // Additional test cases
+        System.out.println("Test Case 1: " + java.util.Arrays.toString(findClosestPair(
+                new int[] { 0, 1, 2, 3 }, new int[] { 0, 1, 2, 3 }))); // Output: [0, 1]
+
+        System.out.println("Test Case 2: " + java.util.Arrays.toString(findClosestPair(
+                new int[] { 3, 1, 4, 1 }, new int[] { 5, 9, 2, 6 }))); // Output: [1, 3]
+
+        System.out.println("Test Case 3: " + java.util.Arrays.toString(findClosestPair(
+                new int[] { 1, 2, 1, 2 }, new int[] { 1, 1, 2, 2 }))); // Output: [0, 2]
+
+        System.out.println("Test Case 4: " + java.util.Arrays.toString(findClosestPair(
+                new int[] { 5, 5, 5, 5 }, new int[] { 5, 5, 5, 5 }))); // Output: [0, 1]
     }
 }

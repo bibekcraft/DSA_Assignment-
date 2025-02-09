@@ -20,6 +20,7 @@ package question6;
  */
 
 public class Question6a {
+
     public static class NumberPrinter {
         // Method to print 0
         public void printZero() {
@@ -39,7 +40,7 @@ public class Question6a {
 
     public static class ThreadController {
         private int n; // The upper limit for printing numbers
-        private int counter = 0; // This will track the current number
+        private int counter = 0; // This will track the current number to be printed
         private final Object lock = new Object(); // Lock object to synchronize threads
 
         public ThreadController(int n) {
@@ -50,7 +51,7 @@ public class Question6a {
         public void zeroThread(NumberPrinter numberPrinter) {
             while (counter < n) {
                 synchronized (lock) {
-                    if (counter % 2 == 0) { // Print 0 only when the counter is even
+                    if (counter % 3 == 0) { // Print 0 only when the counter is divisible by 3
                         numberPrinter.printZero();
                         counter++;
                         lock.notifyAll(); // Notify other threads
@@ -67,9 +68,9 @@ public class Question6a {
 
         // Method to control EvenThread
         public void evenThread(NumberPrinter numberPrinter) {
-            while (counter < n) {
+            while (counter <= n) {
                 synchronized (lock) {
-                    if (counter % 2 == 1) { // Print even numbers when the counter is odd
+                    if (counter % 3 == 1) { // Print even numbers when the counter remainder is 1
                         numberPrinter.printEven(counter);
                         counter++;
                         lock.notifyAll(); // Notify other threads
@@ -86,9 +87,9 @@ public class Question6a {
 
         // Method to control OddThread
         public void oddThread(NumberPrinter numberPrinter) {
-            while (counter < n) {
+            while (counter <= n) {
                 synchronized (lock) {
-                    if (counter % 2 == 2) { // Print odd numbers when the counter is even
+                    if (counter % 3 == 2) { // Print odd numbers when the counter remainder is 2
                         numberPrinter.printOdd(counter);
                         counter++;
                         lock.notifyAll(); // Notify other threads
