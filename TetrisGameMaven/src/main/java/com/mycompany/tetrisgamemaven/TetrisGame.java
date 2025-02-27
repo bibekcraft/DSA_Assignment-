@@ -16,8 +16,8 @@ public class TetrisGame extends JFrame {
         add(board);
 
         addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
+            @Override 
+           public void keyPressed(KeyEvent e) {
                 Block block = board.currentBlock;
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
