@@ -1,4 +1,4 @@
-package question6;
+
 
 /*
  * This program uses multiple threads to print the sequence "0102030405..." up to a given number 'n'.

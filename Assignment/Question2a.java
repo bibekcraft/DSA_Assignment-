@@ -1,33 +1,4 @@
-package question2;
-/*
- * Problem Explanation:
-We need to distribute rewards to employees based on their performance ratings, while ensuring:
 
-    Every employee must receive at least one reward.
-    An employee with a higher rating than their adjacent colleague must receive more rewards.
-
- Step-by-Step Approach
-
-    Initialize rewards array
-        Every employee should receive at least one reward, so we initialize an array with all values set to 1.
-
-    Left-to-right pass
-        If an employee has a higher rating than the previous employee, they should get more rewards than the previous one.
-        Formula:
-        rewards[i]=rewards[i−1]+1
-        rewards[i]=rewards[i−1]+1
-        Ensures increasing sequences are handled.
-
-    Right-to-left pass
-        If an employee has a higher rating than the next employee, they should get more rewards than them.
-        Since we are already assigning rewards in the first pass, we take the maximum of the current reward and the required one.
-        Formula:
-        rewards[i]=max⁡(rewards[i],rewards[i+1]+1)
-        rewards[i]=max(rewards[i],rewards[i+1]+1)
-        Ensures decreasing sequences are handled.
-
-    Sum up all the rewards to get the final answer.
- */
 
 import java.util.Arrays;
 
@@ -87,3 +58,6 @@ public class Question2a {
         System.out.println("Random distribution: " + minRewards(new int[] { 1, 3, 2, 5, 4, 7, 6 })); // Output: 13
     }
 }
+
+// javac Question2a.java
+// java Question1a

@@ -1,4 +1,4 @@
-package question1;
+
 
 public class Question1a {
 
@@ -63,3 +63,7 @@ public class Question1a {
         System.out.println("k=2, n=100: " + findMinMeasurements(2, 100)); // Larger range
     }
 }
+
+
+///javac Question1a.java
+///java Question1a

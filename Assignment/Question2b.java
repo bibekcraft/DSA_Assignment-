@@ -1,28 +1,61 @@
-package question2;
-/*
- * Problem Explanation:
-We have a list of 2D points defined by their x-coordinates and y-coordinates. The goal is to find the pair of points that are closest to each other based on Manhattan Distance, which is calculated as:
-Manhattan Distance=∣xi−xj∣+∣yi−yj∣
-Manhattan Distance=∣xi​−xj​∣+∣yi​−yj​∣
-Step-by-Step Approach
-
-    Iterate over all possible pairs
-        Since we need to compare all points, we use a nested loop.
-
-    Calculate the Manhattan Distance for each pair
-        Compute ∣x[i]−x[j]∣+∣y[i]−y[j]∣∣x[i]−x[j]∣+∣y[i]−y[j]∣.
-        Keep track of the minimum distance encountered so far.
-
-    Update the result if a smaller distance is found
-        If we find a smaller distance, update the minimum distance and store the pair.
-
-    Lexicographically smallest pair handling
-        If two pairs have the same minimum distance, we choose the pair that comes first in lexicographical order:
-            First, compare i (smaller index comes first).
-            If i is the same, choose the smaller j.
+/**
+ * Overview of Question2b.java:
+ * This program finds the lexicographically smallest pair of points with the minimum Manhattan distance
+ * in a set of 2D points provided as two arrays: x-coordinates (x_coords) and y-coordinates (y_coords).
+ * Here's how it works step-by-step:
+ * 
+ * 1. Class Definition:
+ *    - The code defines a public class `Question2b` with two methods: `findClosestPair` and `main`.
+ * 
+ * 2. findClosestPair Method:
+ *    a. Input Validation:
+ *       - Checks if the input arrays (x_coords and y_coords) are null, empty, or of unequal length.
+ *       - Throws an IllegalArgumentException if any condition fails, ensuring robust input handling.
+ *    
+ *    b. Initialization:
+ *       - Gets the number of points (n) from the length of x_coords.
+ *       - Initializes minDistance to Integer.MAX_VALUE to track the smallest Manhattan distance found.
+ *       - Creates a result array of size 2 to store the indices of the closest pair (i, j).
+ * 
+ *    c. Pairwise Comparison:
+ *       - Uses nested loops to compare all unique pairs of points (i, j) where i < j:
+ *         - Outer loop (i) runs from 0 to n-1.
+ *         - Inner loop (j) runs from i+1 to n-1 to avoid self-comparison and duplicates (e.g., (i,j) vs (j,i)).
+ * 
+ *    d. Manhattan Distance Calculation:
+ *       - For each pair (i, j), calculates the Manhattan distance as:
+ *         distance = |x_coords[i] - x_coords[j]| + |y_coords[i] - y_coords[j]|
+ *         - Uses Math.abs() to compute absolute differences in x and y coordinates.
+ * 
+ *    e. Finding the Minimum Distance:
+ *       - If the current distance is less than minDistance:
+ *         - Updates minDistance with the new smaller distance.
+ *         - Stores the pair (i, j) in result[0] and result[1].
+ *       - If the current distance equals minDistance:
+ *         - Compares lexicographically: prefers smaller i, or if i is equal, smaller j.
+ *         - Updates result if the current pair (i, j) is lexicographically smaller than the stored pair.
+ * 
+ *    f. Return Value:
+ *       - Returns the result array containing the indices of the lexicographically smallest pair with
+ *         the minimum Manhattan distance.
+ * 
+ * 3. main Method:
+ *    a. Test Case Setup:
+ *       - Defines an example input with x_coords = {1, 2, 3, 2, 4} and y_coords = {2, 3, 1, 2, 3}.
+ *       - Calls findClosestPair to compute the closest pair.
+ *       - Prints the result as "[i, j]" (e.g., [0, 3] for points (1,2) and (2,2) with distance 1).
+ * 
+ *    b. Additional Test Cases:
+ *       - Runs four additional test cases with different point sets:
+ *         - Test Case 1: Points along a diagonal (distance 2).
+ *         - Test Case 2: Scattered points (distance 2).
+ *         - Test Case 3: Points with ties (distance 1).
+ *         - Test Case 4: All points identical (distance 0).
+ *       - Prints each result as an array using Arrays.toString().
+ * 
+ * Time Complexity: O(n²) due to comparing all pairs, where n is the number of points.
+ * Space Complexity: O(1) excluding input arrays, as only a few variables are used.
  */
-
-
 
 public class Question2b {
 
@@ -95,3 +128,5 @@ public class Question2b {
                 new int[] { 5, 5, 5, 5 }, new int[] { 5, 5, 5, 5 }))); // Output: [0, 1]
     }
 }
+
+//////java Question2b

@@ -1,4 +1,4 @@
-package question1;
+
 
 import java.util.PriorityQueue; // Import PriorityQueue for min-heap implementation
 
@@ -78,3 +78,6 @@ public class Question1b {
                 + findKthSmallestProduct(new int[] { -5, 1 }, new int[] { -2, 3 }, 3)); // Output: -5
     }
 }
+
+///javac Question1b.java
+///java Question1a
