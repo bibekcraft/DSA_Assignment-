@@ -1,197 +1,203 @@
 package networkoptimizer;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 public class NetworkOptimizer extends JFrame {
     public static List<Node> nodes = new ArrayList<>();
     public static List<Edge> edges = new ArrayList<>();
     
     private GraphPanel graphPanel;
-    private JTextField nodeField, edgeField;
     private JTextArea resultArea;
+    private JComboBox<String> metricComboBox;
+    private JLabel statusLabel;
 
     public NetworkOptimizer() {
-        setTitle("Network Topology Optimizer");
-        setSize(900, 700); // Slightly larger for better visibility
+        setTitle("Click-Based Network Optimizer");
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10)); // Add padding
-        getContentPane().setBackground(new Color(240, 240, 245)); // Light gray background
+        setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(new Color(240, 240, 245));
 
-        // Control Panel with modern styling
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new GridBagLayout());
-        controlPanel.setBackground(new Color(255, 255, 255)); // White background
-        controlPanel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createLineBorder(new Color(100, 150, 200)), "Control Panel")); // Blue border
-        
+        JPanel controlPanel = new JPanel(new GridBagLayout());
+        controlPanel.setBackground(Color.WHITE);
+        controlPanel.setBorder(BorderFactory.createTitledBorder("Control Panel"));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Node Input
-        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.EAST;
-        JLabel nodeLabel = new JLabel("Node (x, y):");
-        nodeLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        controlPanel.add(nodeLabel, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 3;
+        statusLabel = new JLabel("Click to add nodes, click two nodes to add edge");
+        controlPanel.add(statusLabel, gbc);
 
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        nodeField = new JTextField("100,100", 15);
-        nodeField.setFont(new Font("Arial", Font.PLAIN, 12));
-        controlPanel.add(nodeField, gbc);
+        gbc.gridy = 1; gbc.gridwidth = 1;
+        controlPanel.add(new JLabel("Optimization Metric:"), gbc);
+        gbc.gridx = 1;
+        String[] metrics = {"Cost", "Bandwidth", "Latency"};
+        metricComboBox = new JComboBox<>(metrics);
+        controlPanel.add(metricComboBox, gbc);
 
-        gbc.gridx = 2; gbc.fill = GridBagConstraints.NONE;
-        JButton addNodeBtn = createStyledButton("Add Node", new Color(50, 150, 50));
-        addNodeBtn.addActionListener(e -> addNode());
-        controlPanel.add(addNodeBtn, gbc);
-
-        // Edge Input
-        gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.EAST;
-        JLabel edgeLabel = new JLabel("Edge (n1, n2, cost, bw):");
-        edgeLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        controlPanel.add(edgeLabel, gbc);
-
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        edgeField = new JTextField("0,1,10,100", 15);
-        edgeField.setFont(new Font("Arial", Font.PLAIN, 12));
-        controlPanel.add(edgeField, gbc);
-
-        gbc.gridx = 2; gbc.fill = GridBagConstraints.NONE;
-        JButton addEdgeBtn = createStyledButton("Add Edge", new Color(50, 150, 50));
-        addEdgeBtn.addActionListener(e -> addEdge());
-        controlPanel.add(addEdgeBtn, gbc);
-
-        // Optimize Button
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 3; gbc.fill = GridBagConstraints.HORIZONTAL;
-        JButton optimizeBtn = createStyledButton("Optimize Network (MST)", new Color(0, 120, 200));
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 3;
+        JButton optimizeBtn = createStyledButton("Optimize Network", new Color(0, 120, 200));
         optimizeBtn.addActionListener(e -> optimizeNetwork());
         controlPanel.add(optimizeBtn, gbc);
 
-        // Shortest Path Button
         gbc.gridy = 3;
-        JButton pathBtn = createStyledButton("Find Shortest Path", new Color(0, 120, 200));
-        pathBtn.addActionListener(e -> findShortestPath());
+        JButton pathBtn = createStyledButton("Find Optimal Path", new Color(0, 120, 200));
+        pathBtn.addActionListener(e -> findOptimalPath());
         controlPanel.add(pathBtn, gbc);
 
-        // Clear Button
         gbc.gridy = 4;
+        JButton analyzeBtn = createStyledButton("Network Analysis", new Color(150, 100, 0));
+        analyzeBtn.addActionListener(e -> analyzeNetwork());
+        controlPanel.add(analyzeBtn, gbc);
+
+        gbc.gridy = 5;
         JButton clearBtn = createStyledButton("Clear Network", new Color(200, 50, 50));
         clearBtn.addActionListener(e -> clearNetwork());
         controlPanel.add(clearBtn, gbc);
 
-        add(controlPanel, BorderLayout.NORTH);
+        add(controlPanel, BorderLayout.WEST);
 
-        // Graph Panel
-        graphPanel = new GraphPanel();
-        graphPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        graphPanel = new GraphPanel(this);
         add(graphPanel, BorderLayout.CENTER);
 
-        // Result Area
-        resultArea = new JTextArea(10, 30);
-        resultArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        resultArea.setBackground(new Color(245, 245, 250));
-        resultArea.setBorder(BorderFactory.createTitledBorder("Results"));
-        resultArea.setEditable(false);
+        resultArea = new JTextArea(10, 40);
+        resultArea.setFont(new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 12));
         add(new JScrollPane(resultArea), BorderLayout.SOUTH);
     }
 
-    // Helper method to create styled buttons
     private JButton createStyledButton(String text, Color color) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
         button.setBackground(color);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createRaisedBevelBorder());
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.brighter());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-            }
-        });
         return button;
     }
 
-    private void addNode() {
-        try {
-            String[] coords = nodeField.getText().split(",");
-            int x = Integer.parseInt(coords[0].trim());
-            int y = Integer.parseInt(coords[1].trim());
-            nodes.add(new Node(nodes.size(), x, y));
-            graphPanel.repaint();
-            resultArea.append("Added Node " + (nodes.size() - 1) + " at (" + x + "," + y + ")\n");
-        } catch (Exception e) {
-            resultArea.append("Error adding node: " + e.getMessage() + "\n");
-        }
+    public void addNode(int x, int y) {
+        String name = "Node" + nodes.size();
+        nodes.add(new Node(nodes.size(), x, y, name));
+        resultArea.append("Added " + name + " (" + x + "," + y + ")\n");
     }
 
-    private void addEdge() {
-        try {
-            String[] data = edgeField.getText().split(",");
-            int n1 = Integer.parseInt(data[0].trim());
-            int n2 = Integer.parseInt(data[1].trim());
-            int cost = Integer.parseInt(data[2].trim());
-            int bandwidth = Integer.parseInt(data[3].trim());
-            if (n1 >= nodes.size() || n2 >= nodes.size()) throw new Exception("Node index out of range");
-            edges.add(new Edge(n1, n2, cost, bandwidth));
-            graphPanel.repaint();
-            resultArea.append("Added Edge " + n1 + " to " + n2 + ": Cost=" + cost + ", Bandwidth=" + bandwidth + "\n");
-        } catch (Exception e) {
-            resultArea.append("Error adding edge: " + e.getMessage() + "\n");
-        }
+    public void addEdge(int n1, int n2) {
+        // Default values for demonstration
+        int cost = 10;
+        int bandwidth = 100;
+        int latency = 5;
+        edges.add(new Edge(n1, n2, cost, bandwidth, latency));
+        resultArea.append(String.format("Added Edge %s-%s: Cost=%d, BW=%d, Latency=%d%n",
+            nodes.get(n1).name, nodes.get(n2).name, cost, bandwidth, latency));
+        graphPanel.repaint();
     }
 
     private void optimizeNetwork() {
-        List<Edge> mst = kruskalMST();
-        int totalCost = mst.stream().mapToInt(e -> e.cost).sum();
-        resultArea.append("\nOptimized Network (MST):\n");
-        for (Edge e : mst) {
-            resultArea.append("Edge " + e.n1 + " to " + e.n2 + ": Cost=" + e.cost + ", Bandwidth=" + e.bandwidth + "\n");
+        if (nodes.isEmpty() || edges.isEmpty()) {
+            resultArea.append("Error: Network is empty\n");
+            return;
         }
-        resultArea.append("Total Cost: " + totalCost + "\n");
-        graphPanel.setMST(mst);
+        String metric = (String) metricComboBox.getSelectedItem();
+        List<Edge> optimalEdges = optimizeByMetric(metric);
+        double totalMetric = calculateTotalMetric(optimalEdges, metric);
+        resultArea.append(String.format("%nOptimal Network (%s-based MST):%n", metric));
+        for (Edge e : optimalEdges) {
+            resultArea.append(String.format("%s-%s: Cost=%d, BW=%d, Latency=%d%n",
+                nodes.get(e.n1).name, nodes.get(e.n2).name, e.cost, e.bandwidth, e.latency));
+        }
+        resultArea.append(String.format("Total %s: %.2f%n", metric, totalMetric));
+        graphPanel.setOptimalEdges(optimalEdges);
+        graphPanel.resetFirstNode();
     }
 
-    private void findShortestPath() {
+    private void findOptimalPath() {
         try {
-            String input = JOptionPane.showInputDialog(this, "Enter source,target (e.g., 0,1):", "Shortest Path", JOptionPane.PLAIN_MESSAGE);
+            String input = JOptionPane.showInputDialog(this, "Enter source,target nodes (e.g., 0,1):");
+            if (input == null) return;
             String[] nodesInput = input.split(",");
             int source = Integer.parseInt(nodesInput[0].trim());
             int target = Integer.parseInt(nodesInput[1].trim());
-            List<Integer> path = dijkstra(source, target);
-            resultArea.append("\nShortest Path from " + source + " to " + target + ":\n");
-            resultArea.append(path.toString() + "\n");
+            if (source >= nodes.size() || target >= nodes.size() || source < 0 || target < 0)
+                throw new Exception("Node index out of range");
+            String metric = (String) metricComboBox.getSelectedItem();
+            List<Integer> path = findPathByMetric(source, target, metric);
+            if (path.isEmpty()) {
+                resultArea.append("No path found between " + source + " and " + target + "\n");
+                return;
+            }
+            double pathCost = calculatePathMetric(path, metric);
+            resultArea.append(String.format("%nOptimal Path (%s) from %s to %s:%n",
+                metric, nodes.get(source).name, nodes.get(target).name));
+            resultArea.append(pathToString(path) + String.format(" (%.2f)%n", pathCost));
             graphPanel.setPath(path);
+            graphPanel.resetFirstNode();
         } catch (Exception e) {
             resultArea.append("Error finding path: " + e.getMessage() + "\n");
         }
     }
 
-    private void clearNetwork() {
-        nodes.clear();
-        edges.clear();
-        graphPanel.clear();
-        resultArea.setText("Network cleared.\n");
+    private void analyzeNetwork() {
+        if (nodes.isEmpty()) {
+            resultArea.append("Network is empty\n");
+            return;
+        }
+        resultArea.append("\nNetwork Analysis:\n");
+        resultArea.append("Nodes: " + nodes.size() + "\n");
+        resultArea.append("Edges: " + edges.size() + "\n");
+        
+        if (!edges.isEmpty()) {
+            double avgCost = edges.stream().mapToInt(e -> e.cost).average().orElse(0);
+            double avgBw = edges.stream().mapToInt(e -> e.bandwidth).average().orElse(0);
+            double avgLatency = edges.stream().mapToInt(e -> e.latency).average().orElse(0);
+            
+            resultArea.append(String.format("Avg Cost: %.2f%n", avgCost));
+            resultArea.append(String.format("Avg Bandwidth: %.2f%n", avgBw));
+            resultArea.append(String.format("Avg Latency: %.2f%n", avgLatency));
+        }
+        
+        int maxDegree = nodes.stream()
+            .mapToInt(n -> (int) edges.stream().filter(e -> e.n1 == n.id || e.n2 == n.id).count())
+            .max().orElse(0);
+        resultArea.append("Max Node Degree: " + maxDegree + "\n");
     }
 
-    private List<Edge> kruskalMST() {
-        List<Edge> mst = new ArrayList<>();
-        edges.sort(Comparator.comparingInt(e -> e.cost));
+    private List<Edge> optimizeByMetric(String metric) {
+        edges.sort(Comparator.comparingDouble(e -> switch (metric) {
+            case "Cost" -> e.cost;
+            case "Bandwidth" -> -e.bandwidth;
+            case "Latency" -> e.latency;
+            default -> e.cost;
+        }));
         UnionFind uf = new UnionFind(nodes.size());
-
-        for (Edge edge : edges) {
-            if (!uf.connected(edge.n1, edge.n2)) {
-                uf.union(edge.n1, edge.n2);
-                mst.add(edge);
+        List<Edge> result = new ArrayList<>();
+        for (Edge e : edges) {
+            if (!uf.connected(e.n1, e.n2)) {
+                uf.union(e.n1, e.n2);
+                result.add(e);
             }
         }
-        return mst;
+        return result;
     }
 
-    private List<Integer> dijkstra(int source, int target) {
+    private List<Integer> findPathByMetric(int source, int target, String metric) {
         int n = nodes.size();
         double[] dist = new double[n];
         int[] prev = new int[n];
@@ -207,13 +213,19 @@ public class NetworkOptimizer extends JFrame {
             int u = (int) pq.poll()[1];
             if (visited[u]) continue;
             visited[u] = true;
+            if (u == target) break;
 
             for (Edge e : edges) {
                 int v = (e.n1 == u) ? e.n2 : (e.n2 == u) ? e.n1 : -1;
                 if (v == -1) continue;
-                double latency = 1.0 / e.bandwidth;
-                if (!visited[v] && dist[u] + latency < dist[v]) {
-                    dist[v] = dist[u] + latency;
+                double weight = switch (metric) {
+                    case "Cost" -> e.cost;
+                    case "Bandwidth" -> 1.0 / e.bandwidth;
+                    case "Latency" -> e.latency;
+                    default -> e.cost;
+                };
+                if (!visited[v] && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
                     prev[v] = u;
                     pq.offer(new double[]{dist[v], v]);
                 }
@@ -228,7 +240,53 @@ public class NetworkOptimizer extends JFrame {
         return path.get(0) == source ? path : new ArrayList<>();
     }
 
+    private double calculateTotalMetric(List<Edge> edges, String metric) {
+        return edges.stream().mapToDouble(e -> switch (metric) {
+            case "Cost" -> e.cost;
+            case "Bandwidth" -> e.bandwidth;
+            case "Latency" -> e.latency;
+            default -> e.cost;
+        }).sum();
+    }
+
+    private double calculatePathMetric(List<Integer> path, String metric) {
+        double total = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            int n1 = path.get(i);
+            int n2 = path.get(i + 1);
+            total += edges.stream()
+                .filter(e -> (e.n1 == n1 && e.n2 == n2) || (e.n1 == n2 && e.n2 == n1))
+                .findFirst()
+                .map(e -> switch (metric) {
+                    case "Cost" -> (double) e.cost;
+                    case "Bandwidth" -> (double) e.bandwidth;
+                    case "Latency" -> (double) e.latency;
+                    default -> (double) e.cost;
+                }).orElse(0.0);
+        }
+        return total;
+    }
+
+    private String pathToString(List<Integer> path) {
+        return path.stream().map(i -> nodes.get(i).name).collect(Collectors.joining(" -> "));
+    }
+
+    private void clearNetwork() {
+        nodes.clear();
+        edges.clear();
+        graphPanel.clear();
+        resultArea.setText("Network cleared.\n");
+        updateStatus("Click to add nodes, click two nodes to add edge");
+    }
+
+    public void updateStatus(String message) {
+        statusLabel.setText(message);
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new NetworkOptimizer().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            NetworkOptimizer optimizer = new NetworkOptimizer();
+            optimizer.setVisible(true);
+        });
     }
 }
