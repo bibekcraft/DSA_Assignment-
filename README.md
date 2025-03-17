@@ -5,25 +5,23 @@
 2. [Prerequisites](#prerequisites)
 3. [Setup Instructions](#setup-instructions)
 4. [Running the Application](#running-the-application)
-5. [SQL Script](#sql-script)
-6. [Project Structure](#project-structure)
-7. [Credits](#credits)
 
 ## Introduction
 This project consists of two main components:
-1. **NetworkOptimizer**: A Java-based application that optimizes network traffic using specific algorithms (details on optimization algorithms can be added).
+1. **NetworkOptimizer**: A Java-based application that optimizes network traffic using specific algorithms. This component can be further expanded to include algorithms for network routing, bandwidth management, or traffic optimization.
 2. **Tetris Game**: A simple implementation of the Tetris game using Java, showcasing basic game mechanics and GUI design.
+3. **Code**: A simple implementation of the code  using Java.
 
-Both components are part of the same repository and utilize NetBeans as the IDE for development.
+
+Both components are part of the same repository and can be developed and run using **VS Code** or **NetBeans** IDE.
 
 ## Prerequisites
 Before running the application, ensure that you have the following:
-- **NetBeans IDE** installed (you can download it [here](https://netbeans.apache.org/)).
 - **Java JDK** (version 8 or above) installed.
-- A database (e.g., MySQL or SQLite) set up for running the SQL script. (If using MySQL, make sure to install and configure it).
-- **Database Connection**: You'll need to set up the JDBC connection to your database.
+- **VS Code** installed with the **Java Extension Pack**. You can install VS Code [here](https://code.visualstudio.com/).
+- **Maven** or **Gradle** (for dependency management).
+- **MySQL** or **SQLite** database installed if using a database for the **NetworkOptimizer** component.
+- Database configuration for **NetworkOptimizer** (JDBC connection).
 
 ## Setup Instructions
 
-### 1. Clone the repository:
-```bash
