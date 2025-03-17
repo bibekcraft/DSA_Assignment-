@@ -1,4 +1,4 @@
-# Project Title: NetworkOptimizer and Tetris Game
+# Project Title: Dsa
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -13,15 +13,15 @@
 This project consists of two main components:
 1. **NetworkOptimizer**: A Java-based application that optimizes network traffic using specific algorithms (details on optimization algorithms can be added).
 2. **Tetris Game**: A simple implementation of the Tetris game using Java, showcasing basic game mechanics and GUI design.
+3. 2. **Code **: A  implementation of the code  using Java.
+
 
 Both components are part of the same repository and utilize NetBeans as the IDE for development.
 
 ## Prerequisites
 Before running the application, ensure that you have the following:
-- **NetBeans IDE** installed (you can download it [here](https://netbeans.apache.org/)).
-- **Java JDK** (version 8 or above) installed.
-- A database (e.g., MySQL or SQLite) set up for running the SQL script. (If using MySQL, make sure to install and configure it).
-- **Database Connection**: You'll need to set up the JDBC connection to your database.
+- **NetBeans IDE** installed 
+- A database (e.g., MySQL or SQLite) set up for running the SQL script.
 
 ## Setup Instructions
 
