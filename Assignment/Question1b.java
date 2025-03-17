@@ -1,25 +1,8 @@
 
 
-import java.util.PriorityQueue; // Import PriorityQueue for min-heap implementation
+import java.util.PriorityQueue;
 
-/*
- * Problem Explanation:
- * We are given two sorted arrays of investment returns, `returns1` and `returns2`, and a target number `k`.
- * The goal is to find the kth lowest combined return that can be achieved by selecting one investment from each array.
- * The combined return is calculated as the product of the selected investments.
- *
- * Approach:
- * 1. Generate all possible combined returns by multiplying each element of `returns1` with each element of `returns2`.
- * 2. Store all combined returns in a min-heap (PriorityQueue) to keep them sorted in ascending order.
- * 3. Extract the kth smallest combined return by removing the smallest element from the min-heap `k` times.
- *
- * Why Use a Min-Heap?
- * - A min-heap allows us to efficiently retrieve the smallest element in O(1) time and remove it in O(log n) time.
- * - This ensures that we can find the kth smallest combined return in O(k log n) time, where n is the total number of combined returns.
- *
- * Time Complexity: O(n * m log(n * m)), where n and m are the lengths of `returns1` and `returns2`.
- * Space Complexity: O(n * m) for storing all combined returns in the min-heap.
- */
+
 
 public class Question1b {
 
@@ -60,22 +43,19 @@ public class Question1b {
     }
 
     public static void main(String[] args) {
-        // Example cases
         System.out.println("returns1=[2,5], returns2=[3,4], k=2 -> "
-                + findKthSmallestProduct(new int[] { 2, 5 }, new int[] { 3, 4 }, 2)); // Output: 8
+                + findKthSmallestProduct(new int[] { 2, 5 }, new int[] { 3, 4 }, 2)); 
         System.out.println("returns1=[-4,-2,0,3], returns2=[2,4], k=6 -> "
-                + findKthSmallestProduct(new int[] { -4, -2, 0, 3 }, new int[] { 2, 4 }, 6)); // Output: 0
+                + findKthSmallestProduct(new int[] { -4, -2, 0, 3 }, new int[] { 2, 4 }, 6)); 
 
-        // Edge cases
         System.out.println("returns1=[1,2,3], returns2=[1,2,3], k=4 -> "
-                + findKthSmallestProduct(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 }, 4)); // Output: 4
+                + findKthSmallestProduct(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 }, 4)); 
         System.out.println("returns1=[-3,-2,-1], returns2=[-2,-1], k=3 -> "
-                + findKthSmallestProduct(new int[] { -3, -2, -1 }, new int[] { -2, -1 }, 3)); // Output: 3
+                + findKthSmallestProduct(new int[] { -3, -2, -1 }, new int[] { -2, -1 }, 3));
         System.out.println(
-                "returns1=[1], returns2=[1], k=1 -> " + findKthSmallestProduct(new int[] { 1 }, new int[] { 1 }, 1)); // Output:
-                                                                                                                      // 1
+                "returns1=[1], returns2=[1], k=1 -> " + findKthSmallestProduct(new int[] { 1 }, new int[] { 1 }, 1));
         System.out.println("returns1=[-5,1], returns2=[-2,3], k=3 -> "
-                + findKthSmallestProduct(new int[] { -5, 1 }, new int[] { -2, 3 }, 3)); // Output: -5
+                + findKthSmallestProduct(new int[] { -5, 1 }, new int[] { -2, 3 }, 3)); 
     }
 }
 

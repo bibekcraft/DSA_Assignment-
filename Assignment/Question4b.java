@@ -2,20 +2,7 @@ import java.util.*;
 
 public class Question4b {
 
-    /**
-     * Method to determine the minimum number of roads to traverse to collect all
-     * packages.
-     * 
-     * @param packages An array where each index represents a location, and the
-     *                 value (0 or 1)
-     *                 indicates whether there is a package to be collected.
-     * @param roads    A 2D array where each entry [a, b] represents a bidirectional
-     *                 road between
-     *                 locations a and b.
-     * @return The minimum number of roads that need to be traversed to collect all
-     *         packages
-     *         and return to the starting point.
-     */
+
     public static int minRoadsToCollectAllPackages(int[] packages, int[][] roads) {
         int n = packages.length;
 
@@ -48,19 +35,7 @@ public class Question4b {
         return result[0]; // Return the total roads used
     }
 
-    /**
-     * DFS function to traverse the graph and calculate the minimum traversal cost.
-     * 
-     * @param node           The current location in the graph.
-     * @param parent         The previous location to prevent backtracking.
-     * @param graph          The adjacency list representation of the city map.
-     * @param importantNodes The set of locations that have packages to be
-     *                       collected.
-     * @param visited        Boolean array to keep track of visited locations.
-     * @param result         Array with a single element to store the total number
-     *                       of roads traversed.
-     * @return True if this subtree contains a package, otherwise False.
-     */
+
     private static boolean dfs(int node, int parent, List<List<Integer>> graph, Set<Integer> importantNodes,
             boolean[] visited, int[] result) {
         visited[node] = true;
@@ -83,16 +58,13 @@ public class Question4b {
         return hasPackageOrSubtree; // Return whether this branch of the tree contains a package
     }
 
-    // Main method for testing the function with example cases
     public static void main(String[] args) {
-        // Example 1
         int[] packages1 = { 1, 0, 0, 0, 0, 1 };
         int[][] roads1 = { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 } };
-        System.out.println(minRoadsToCollectAllPackages(packages1, roads1)); // Expected Output: 2
+        System.out.println(minRoadsToCollectAllPackages(packages1, roads1)); 
 
-        // Example 2
         int[] packages2 = { 0, 0, 0, 1, 1, 0, 0, 1 };
         int[][] roads2 = { { 0, 1 }, { 0, 2 }, { 1, 3 }, { 1, 4 }, { 2, 5 }, { 5, 6 }, { 5, 7 } };
-        System.out.println(minRoadsToCollectAllPackages(packages2, roads2)); // Expected Output: 2
+        System.out.println(minRoadsToCollectAllPackages(packages2, roads2)); 
     }
 }

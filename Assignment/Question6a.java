@@ -1,24 +1,4 @@
 
-
-/*
- * This program uses multiple threads to print the sequence "0102030405..." up to a given number 'n'.
- * There are three threads:
- * - ZeroThread: Prints '0'
- * - EvenThread: Prints even numbers
- * - OddThread: Prints odd numbers
- * 
- * These threads must be synchronized to ensure the numbers are printed in the correct order:
- * "0", then even numbers, then odd numbers, interleaved.
- * 
- * The synchronization is handled using:
- * - A shared counter to track the number being printed
- * - A lock object for controlling access to the critical section
- * - wait() and notifyAll() to coordinate the printing order between the threads
- *
- * Each thread waits for its turn based on the counter value, prints the number, and then notifies the other threads to proceed.
- * This ensures that the numbers are printed in sequence: "0102030405..." for n = 5.
- */
-
 public class Question6a {
 
     public static class NumberPrinter {

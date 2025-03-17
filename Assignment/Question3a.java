@@ -2,30 +2,9 @@
 
 import java.util.*;
 
-/*
- * Problem Explanation:
-We have n devices, and we can either:
-Install a communication module on a device at cost modules[i]
- Connect two devices using direct connections at cost connections[j] = [device1, device2, cost]
 
-  Steps to Solve:
-
-    Model the problem as a graph
-        Each device is a node.
-        Each direct connection is an edge with weight cost.
-        Each device can connect itself by installing a module.
-
-    Use Minimum Spanning Tree (MST) + Virtual Node Approach
-        Create a virtual node (super-node) and connect it to all devices, with an edge weight = modules[i] (cost to install a module).
-        Add all given connections to the graph.
-        Use Kruskal’s Algorithm (or Prim’s Algorithm) to find the Minimum Spanning Tree (MST).
-
-    Return the MST Cost
-        The MST guarantees the minimum cost to connect all devices, either directly or using modules.
- */
 public class Question3a {
 
-    // Disjoint Set Union (DSU) / Union-Find with Path Compression
     static class DSU {
         int[] parent, rank;
 
@@ -100,21 +79,17 @@ public class Question3a {
     }
 
     public static void main(String[] args) {
-        // Example Test Case
         int n = 3;
         int[] modules = { 1, 2, 2 };
         int[][] connections = { { 1, 2, 1 }, { 2, 3, 1 } };
 
-        // Output: 3
         System.out.println("Minimum Cost: " + minCostToConnectDevices(n, modules, connections));
 
-        // Additional Test Cases
         System.out.println("Test Case 1: " + minCostToConnectDevices(4, new int[] { 4, 3, 2, 1 },
-                new int[][] { { 1, 2, 3 }, { 2, 3, 2 }, { 3, 4, 1 } })); // Expected: 3
+                new int[][] { { 1, 2, 3 }, { 2, 3, 2 }, { 3, 4, 1 } })); 
         System.out.println("Test Case 2: " + minCostToConnectDevices(4, new int[] { 3, 2, 1, 4 },
-                new int[][] { { 1, 2, 2 }, { 2, 3, 2 }, { 3, 4, 2 } })); // Expected: 4
+                new int[][] { { 1, 2, 2 }, { 2, 3, 2 }, { 3, 4, 2 } }));
         System.out.println(
-                "Test Case 3: " + minCostToConnectDevices(2, new int[] { 10, 5 }, new int[][] { { 1, 2, 20 } })); // Expected:
-                                                                                                                  // 10
+                "Test Case 3: " + minCostToConnectDevices(2, new int[] { 10, 5 }, new int[][] { { 1, 2, 20 } })); 
     }
 }
